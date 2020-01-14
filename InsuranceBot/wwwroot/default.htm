@@ -1,0 +1,44 @@
+﻿<html>
+<title>Fridai Lab</title>
+<head>
+    <link href="https://cdn.botframework.com/botframework-webchat/master/botchat.css" rel="stylesheet" />
+    <script src="https://cdn.botframework.com/botframework-webchat/master/webchat.js"></script>
+    <style>
+        html, body {
+            height: 100%
+        }
+
+        body {
+            margin: 0
+        }
+
+        #webchat,
+        #webchat > * {
+            height: 100%;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div id="webchat"></div>
+    <script>
+        (async function () {
+            const authorizationToken = await fetch('https://westus.api.cognitive.microsoft.com/sts/v1.0/issuetoken', {
+                method: 'post',
+                headers: {
+                    "Ocp-Apim-Subscription-Key": "2b9bd50601d240428bc33b8cdbf97bf4",
+                }
+            }).then(res => res.text());
+
+            let webSpeechPonyfillFactory = await window.WebChat.createCognitiveServicesSpeechServicesPonyfillFactory({ authorizationToken: authorizationToken, region: 'westus' });
+
+            window.WebChat.renderWebChat({
+                directLine: window.WebChat.createDirectLine({ secret: 'Q02wlT3U_Io.CzyC1J2uUmoCyHm5R-xMhGTf1BPNwOvUckVdA66QZog' }),
+                webSpeechPonyfillFactory
+            }, document.getElementById('webchat'));
+
+            document.querySelector('#webchat > *').focus();
+        })().catch(err => console.error(err));
+    </script>
+</body>
+</html>
